@@ -134,8 +134,6 @@ class ArticleController extends Controller {
                 ->get()
                 ->toArray();
         
-        //echo "<pre>";
-        //print_r($artclesdata);
         $header_row = $header_main = '';
         
         $header_main.='SI No'."\t".
