@@ -178,13 +178,13 @@ class ArticleController extends Controller {
         $data = $request->session()->all();
         echo "<pre>";
         print_r($data);
-        //print_r($delete_key );
-        //echo "<br/>";
-        //echo session('name') ."--". session('email'). "--". session('org');
         $request->session()->forget(['name', 'email', 'age', 'org']);
         print_r($request->session()->all());
+        //echo "<br>";
+        //echo public_path('uploads/article/thumb/');
+        //echo "<br>";
+        //echo public_path() . '/uploads/article/large/';
     }
     
     
-
 }
