@@ -121,6 +121,54 @@ class ArticleController extends Controller {
         
         return response()->json($news_info[0]);
     }
+    
+    public function export(Request $request) {
+        ob_clean();
+        ob_end_clean();
+        set_time_limit(3600);
+        
+        $artclesdata = DB::table('articles')
+                ->join('news_categories', 'articles.article_category', '=','news_categories.id')
+                ->select('articles.*','news_categories.category_name')
+                ->orderBy('articles.created_at', 'DESC')
+                ->get()
+                ->toArray();
+        
+        //echo "<pre>";
+        //print_r($artclesdata);
+        $header_row = $header_main = '';
+        
+        $header_main.='SI No'."\t".
+                     'Article Title'."\t".
+                     'Article Category'."\t".                     
+                     'Article Content'."\t".                   
+                     'Article Publish Date'."\t \n";
+        
+        if(!empty($artclesdata)) {
+            $si_no = 0;
+            foreach($artclesdata as $article) {
+                $si_no++;
+                $article_title = preg_replace("/\s+/", "", $article->title);
+                $article_content = preg_replace('/\s+/',' ', $article->body);
+                $article_category = preg_replace('/\s+/',' ', $article->category_name);
+                $published_date = $article->created_at;
+                
+                $header_row.=$si_no."\t".
+                              $article_title."\t".
+                              $article_category."\t".                             
+                              $article_content."\t".
+                              $published_date."\t \n";
+            }
+        }
+        
+        $file_name = date('Y-m-d H:i:s')."-artcles-list.xls";
+        header('Content-Type: application/ms-excel');
+        header('Content-Disposition: attachment; filename='.$file_name);
+        echo ($header_main);
+        echo ($header_row);
+        die;
+        
+    }
 
     public function setSession() {
         $arr = array('name' => 'Manojit Nandi', 'email' => 'mnbl87@gmail.com', 'age' => '32', 'org' => 'simpliance');
