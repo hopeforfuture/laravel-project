@@ -109,7 +109,7 @@
                 success:function(response) {
                     console.log(response.title);
                     $("#news_title").html(response.title);
-                    $("#news_category").html(response.article_category);
+                    $("#news_category").html(response.category_name);
                     $("#news_detail").html(response.body);
                     $("#news_created_at").html(response.created_at);
                     

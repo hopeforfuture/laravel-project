@@ -111,6 +111,16 @@ class ArticleController extends Controller {
         Session::flash('success_msg', 'Article Deleted successfully.');
         return redirect()->route('article.index');
     }
+    
+    public function view(Request $request) {
+        $id = $request->id;
+        $news_info = DB::table('articles')
+                ->join('news_categories', 'articles.article_category', '=','news_categories.id')
+                ->where('articles.id', '=', $id)
+                ->select('articles.*','news_categories.category_name')->get()->toArray();
+        
+        return response()->json($news_info[0]);
+    }
 
     public function setSession() {
         $arr = array('name' => 'Manojit Nandi', 'email' => 'mnbl87@gmail.com', 'age' => '32', 'org' => 'simpliance');
