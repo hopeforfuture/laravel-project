@@ -8,9 +8,6 @@ use App\NewsCategory;
 use App\Article;
 use Session;
 use Image;
-use Illuminate\Validation\Rule;
-use Validator;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
 class ArticleController extends Controller {
@@ -65,12 +62,54 @@ class ArticleController extends Controller {
         return view('articles.edit', compact('article', 'categories'));
     }
 
-    public function update(Request $request) {
+    public function update($id, Request $request) {
         $this->validate($request, [
             'title' => 'required',
             'body' => 'required',
             'article_img' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
+        
+        $article = Article::find($id);       
+        $postData = $request->all();
+        
+        if ($request->hasFile('article_img')) {
+            $file = $request->file('article_img');
+            $orig_name = str_replace(' ', '-', trim($file->getClientOriginalName()));
+            $filename = time() . '-' . $orig_name;
+            $destinationPath = public_path() . '/uploads/article/large/';
+            $destinationPath_thumb = public_path() . '/uploads/article/thumb/';
+
+            $img = Image::make($file->getRealPath());
+            $img->resize(120, 100, function ($constraint) {
+                $constraint->aspectRatio();
+            })->save($destinationPath_thumb . $filename);
+            
+            $file->move($destinationPath, $filename);            
+            $postData['article_img'] = $filename;
+            
+            $old_image = $article->article_img;
+            $old_image_path_thumb = public_path() . '/uploads/article/thumb/' . $old_image;
+            $old_image_path_large = public_path() . '/uploads/article/large/' . $old_image;
+            @unlink($old_image_path_thumb);
+            @unlink($old_image_path_large);
+        }
+        
+        Article::find($id)->update($postData);
+        Session::flash('success_msg', 'Article Updated successfully.');
+        return redirect()->route('article.index');
+    }
+    
+    public function remove($id) {
+        $article = Article::find($id);
+        
+        $old_image = $article->article_img;
+        $old_image_path_thumb = public_path() . '/uploads/article/thumb/' . $old_image;
+        $old_image_path_large = public_path() . '/uploads/article/large/' . $old_image;
+        @unlink($old_image_path_thumb);
+        @unlink($old_image_path_large);
+        $article->delete();
+        Session::flash('success_msg', 'Article Deleted successfully.');
+        return redirect()->route('article.index');
     }
 
     public function setSession() {
@@ -89,5 +128,7 @@ class ArticleController extends Controller {
         $request->session()->forget(['name', 'email', 'age', 'org']);
         print_r($request->session()->all());
     }
+    
+    
 
 }
