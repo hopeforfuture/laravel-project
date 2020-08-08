@@ -128,7 +128,7 @@ class NewsController extends Controller {
             $si_no = 0;
             foreach ($newsdata as $news) {                
                 $si_no++;
-                $news_title = preg_replace("/\s+/", "", $news->news_title);
+                $news_title = preg_replace("/\s+/", " ", $news->news_title);
                 $news_title = preg_replace('/\s+/',' ', $news_title);
                 $news_slug = preg_replace('/\s+/',' ', $news->news_slug);
                 $news_content = preg_replace('/\s+/',' ', $news->news_description);
@@ -221,8 +221,6 @@ class NewsController extends Controller {
 	$news->save();
         Session::flash('success_msg', 'News Deleted successfully.');
         return redirect()->route('news.index');
-    } 
-    
-    
-
+    }     
+   
 }
