@@ -129,7 +129,7 @@ class NewsController extends Controller {
             foreach ($newsdata as $news) {                
                 $si_no++;
                 $news_title = preg_replace("/\s+/", " ", $news->news_title);
-                $news_title = preg_replace('/\s+/',' ', $news_title);
+                //$news_title = preg_replace('/\s+/',' ', $news_title);
                 $news_slug = preg_replace('/\s+/',' ', $news->news_slug);
                 $news_content = preg_replace('/\s+/',' ', $news->news_description);
                 $news_category = preg_replace('/\s+/',' ', $news->category_name);
