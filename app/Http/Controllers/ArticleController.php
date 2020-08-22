@@ -19,8 +19,6 @@ class ArticleController extends Controller {
     }
 
     public function index(Request $request) {
-        //echo Auth::user()->id;
-        //print($this->getUserDetails());
         $categories = NewsCategory::where('category_status', 1)->orderBy('category_name', 'ASC')->pluck('category_name', 'id')->toArray();
         $articles = Article::where('created_by', Auth::user()->id)
                 ->orderBy('created_at', 'desc')->paginate(5);
@@ -58,10 +56,8 @@ class ArticleController extends Controller {
             $file->move($destinationPath, $filename);
             $article->article_img = $filename;
         }
-        //$news->news_slug = Str::slug($request->news_title);
         $article->created_by = Auth::user()->id;
         $article->save();
-        //Session::flash('success', 'Article Added successfully.');
         Session::flash('success', 'Article Added successfully.');
         return redirect()->route('article.index');
     }
