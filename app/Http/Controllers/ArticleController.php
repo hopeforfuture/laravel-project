@@ -9,12 +9,21 @@ use App\Article;
 use Session;
 use Image;
 use Illuminate\Support\Facades\DB;
+//use Illuminate\Support\Facades\Auth;
+use Auth;
 
 class ArticleController extends Controller {
+    
+    public function __construct() {
+        $this->middleware('auth');
+    }
 
     public function index(Request $request) {
+        //echo Auth::user()->id;
+        //print($this->getUserDetails());
         $categories = NewsCategory::where('category_status', 1)->orderBy('category_name', 'ASC')->pluck('category_name', 'id')->toArray();
-        $articles = Article::orderBy('created_at', 'desc')->paginate(5);
+        $articles = Article::where('created_by', Auth::user()->id)
+                ->orderBy('created_at', 'desc')->paginate(5);
         return view('articles.index', compact('articles', 'categories'))
                         ->with('i', ($request->input('page', 1) - 1) * 5);
     }
@@ -50,6 +59,7 @@ class ArticleController extends Controller {
             $article->article_img = $filename;
         }
         //$news->news_slug = Str::slug($request->news_title);
+        $article->created_by = Auth::user()->id;
         $article->save();
         //Session::flash('success', 'Article Added successfully.');
         Session::flash('success', 'Article Added successfully.');
@@ -59,6 +69,9 @@ class ArticleController extends Controller {
     public function edit($id) {
         $categories = NewsCategory::where('category_status', 1)->orderBy('category_name', 'ASC')->pluck('category_name', 'id')->toArray();
         $article = Article::find($id);
+        if($article->created_by != Auth::user()->id) {
+            return redirect()->route('article.index');
+        }
         return view('articles.edit', compact('article', 'categories'));
     }
 
@@ -129,7 +142,9 @@ class ArticleController extends Controller {
         
         $artclesdata = DB::table('articles')
                 ->join('news_categories', 'articles.article_category', '=','news_categories.id')
-                ->select('articles.*','news_categories.category_name')
+                ->join('users', 'articles.created_by', '=','users.id')
+                ->where('articles.created_by', Auth::user()->id)
+                ->select('articles.*','news_categories.category_name', 'users.name')
                 ->orderBy('articles.created_at', 'DESC')
                 ->get()
                 ->toArray();
@@ -139,22 +154,25 @@ class ArticleController extends Controller {
         $header_main.='SI No'."\t".
                      'Article Title'."\t".
                      'Article Category'."\t".                     
-                     'Article Content'."\t".                   
+                     'Article Content'."\t". 
+                     'Created By'."\t".
                      'Article Publish Date'."\t \n";
         
         if(!empty($artclesdata)) {
             $si_no = 0;
             foreach($artclesdata as $article) {
                 $si_no++;
-                $article_title = preg_replace("/\s+/", "", $article->title);
+                $article_title = preg_replace("/\s+/", " ", $article->title);
                 $article_content = preg_replace('/\s+/',' ', $article->body);
                 $article_category = preg_replace('/\s+/',' ', $article->category_name);
+                $created_by = $article->name;
                 $published_date = $article->created_at;
                 
                 $header_row.=$si_no."\t".
                               $article_title."\t".
                               $article_category."\t".                             
                               $article_content."\t".
+                              $created_by."\t".
                               $published_date."\t \n";
             }
         }
@@ -184,6 +202,13 @@ class ArticleController extends Controller {
         //echo public_path('uploads/article/thumb/');
         //echo "<br>";
         //echo public_path() . '/uploads/article/large/';
+        //echo "<br/>";
+        //echo $this->param;
+    }
+    
+    private function getUserDetails() {
+        $user_id = Auth::user()->id;
+        return $user_id;
     }
     
     

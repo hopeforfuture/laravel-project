@@ -17,6 +17,15 @@
                 <div class="pull-right">
                     <a class="btn btn-success" href="{{ route('article.add') }}">Create Article</a> 
                     <a class="btn btn-info" href="{{ route('article.export') }}"> Export to Excel</a>
+                    <a class="btn btn-info" href="{{ route('logout') }}"
+                       onclick="event.preventDefault();
+                               document.getElementById('logout-form').submit();">
+                        {{ __('Logout') }}
+                    </a>
+
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
                 </div>
             </div>
         </div>
@@ -25,13 +34,13 @@
                 <table class="table table-striped task-table">
                     <!-- Table Headings -->
                     <thead>
-                        <th>Serial No</th>
-                        <th>Article title</th>
-                        <th>Article Short Description</th>                
-                        <th>Article Image</th>
-                        <th>Article Category</th>
-                        <th>Created</th>
-                        <th>Action</th>
+                    <th>Serial No</th>
+                    <th>Article title</th>
+                    <th>Article Short Description</th>                
+                    <th>Article Image</th>
+                    <th>Article Category</th>
+                    <th>Created</th>
+                    <th>Action</th>
                     </thead>
 
                     <!-- Table Body -->
@@ -49,20 +58,20 @@
                             <td class="table-text">
                                 <div>
                                     {!! \Illuminate\Support\Str::words(htmlspecialchars($item->body, ENT_QUOTES), 10,'....')  !!}
-                                    
+
                                 </div>
                             </td>                          
                             <td class="table-text">
                                 @if(!empty($item->article_img))
-                                    <div>
-                                        <img src='{{ asset("uploads/article/thumb/$item->article_img")}}'  />
-                                    </div>
+                                <div>
+                                    <img src='{{ asset("uploads/article/thumb/$item->article_img")}}'  />
+                                </div>
                                 @else
-                                    <div>
-                                        <img src='{{ asset("img/img-not-avbl.jpg")}}' width="80" height="60" />
-                                    </div>
+                                <div>
+                                    <img src='{{ asset("img/img-not-avbl.jpg")}}' width="80" height="60" />
+                                </div>
                                 @endif
-                                
+
                             </td>
                             <td class="table-text">
                                 {{ $categories[$item->article_category] }}
@@ -92,40 +101,40 @@
 
 
 <script type="text/javascript">
-    $(document).ready(function(){
+    $(document).ready(function () {
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-        
-        $("body").on("click", ".article-view", function(){
+
+        $("body").on("click", ".article-view", function () {
             var article_id = $(this).attr("article_id");
             $.ajax({
                 type: 'POST',
                 url: "{{ route('article.view') }}",
-                data: {id : article_id},
+                data: {id: article_id},
                 dataType: 'json',
-                success:function(response) {
+                success: function (response) {
                     console.log(response.title);
                     $("#news_title").html(response.title);
                     $("#news_category").html(response.category_name);
                     $("#news_detail").html(response.body);
                     $("#news_created_at").html(response.created_at);
-                    
-                    if(response.article_img != null) {
+
+                    if (response.article_img != null) {
                         var src = '{{ asset("uploads/article/thumb") }}' + "/" + response.article_img;
                         $("#news_img").attr('src', src);
                     } else {
                         $("#news_img").attr('src', '{{ asset("img/img-not-avbl.jpg") }}');
                     }
-                    
+
                     $("#viewmodal").modal();
-                    
+
                 }
             });
         });
-        
+
     });
 </script>
 
@@ -138,7 +147,7 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title" style="color:red;font-weight:bold;">Article Detail View</h4>
             </div>
-            
+
             <div class="modal-body">
                 <table class="table table-striped task-table">
                     <tr>
@@ -170,7 +179,7 @@
                     </tr>
                 </table>
             </div>
-            
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>

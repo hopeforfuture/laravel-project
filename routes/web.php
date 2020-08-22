@@ -87,3 +87,7 @@ Route::get('/newsitem', 'TestController@newslist')->name('newsitem.index');
 Route::get('/sessionsetget', 'TestController@setsession')->name('session.example');
 
 Route::get('/search', 'TestController@search')->name('search');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
