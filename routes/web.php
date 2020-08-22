@@ -80,6 +80,12 @@ Route::prefix('article')->group(function() {
     Route::get('/search', 'ArticleController@search')->name('article.search');
     Route::get('/sessionset', 'ArticleController@setSession')->name('article.setSession');
     Route::get('/sessionget', 'ArticleController@getSession')->name('article.getsession');
+    Route::get('/getArticleInfo/{id}', 'ArticleController@getArticleData_belongsTo')->name('laravel.belongto');
+});
+
+Route::prefix('eloquent')->group(function() {
+    Route::get('/user/{id}', 'EloquentController@getUserData')->name('laravel.hasone');
+    Route::get('/category/{id}/getposts', 'EloquentController@getPosts')->name('laravel.hasmany');
 });
 
 

@@ -15,7 +15,7 @@ use Auth;
 class ArticleController extends Controller {
     
     public function __construct() {
-        $this->middleware('auth');
+        $this->middleware('auth')->except(['getArticleData_belongsTo']);
     }
 
     public function index(Request $request) {
@@ -207,5 +207,13 @@ class ArticleController extends Controller {
         return $user_id;
     }
     
-    
+    public function getArticleData_belongsTo($id='') {
+       $articleData = Article::find($id);
+       if(!empty($articleData)) {
+           echo "<pre>";
+           print_r(json_decode($articleData->category, TRUE));
+       } else {
+           return 'No data found.';
+       }
+    }
 }
