@@ -41,7 +41,7 @@ class EloquentController extends Controller
         if(!empty($user)) {
             if(!empty($user->roles->toArray())) {
                 foreach($user->roles as $role) {
-                    echo $role->name."<br/>";
+                    echo $role->name."------".$role->pivot->created_at."<br/>";
                 }
             } 
             else {
