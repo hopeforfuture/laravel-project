@@ -12,4 +12,8 @@ class DemoUser extends Model
     public function profile() {
         return $this->hasOne('App\DemoUserProfile', 'user_id');
     }
+    
+    public function roles() {
+        return $this->belongsToMany('App\Role', 'role_user', 'user_id', 'role_id')->withTimestamps();;
+    }
 }

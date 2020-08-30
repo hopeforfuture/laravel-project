@@ -35,4 +35,20 @@ class EloquentController extends Controller
             return 'No data found.';
         }
     }
+    
+    public function getRoles($id='') {
+        $user = DemoUser::find($id);
+        if(!empty($user)) {
+            if(!empty($user->roles->toArray())) {
+                foreach($user->roles as $role) {
+                    echo $role->name."<br/>";
+                }
+            } 
+            else {
+                echo 'No role found for this user.';
+            }
+        } else {
+            return 'No data found.';
+        }
+    }
 }
