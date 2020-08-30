@@ -28,7 +28,7 @@ class EloquentController extends Controller
             echo $categoryData->category_name."<br/>";
             if(!empty($categoryData->articles)) {
                 foreach ($categoryData->articles as $article) {
-                    echo $article->title."--------".$article->title."<br/ss>";
+                    echo $article->title."--------".$article->title."<br/>";
                 }
             }
         } else {
