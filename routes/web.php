@@ -87,6 +87,7 @@ Route::prefix('eloquent')->group(function() {
     Route::get('/user/{id}', 'EloquentController@getUserData')->name('laravel.hasone');
     Route::get('/category/{id}/getposts', 'EloquentController@getPosts')->name('laravel.hasmany');
     Route::get('/user/{id}/getroles', 'EloquentController@getRoles')->name('laravel.manytomany');
+    Route::get('/mechanic/{id}/getOwner', 'EloquentController@getOwner')->name('laravel.hasonethrough');
 });
 
 

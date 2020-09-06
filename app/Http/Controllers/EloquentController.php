@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\DemoUser;
 use App\DemoUserProfile;
 use App\NewsCategory;
+use App\Mechanic;
+use App\Car;
 use Session;
 
 
@@ -50,5 +52,17 @@ class EloquentController extends Controller
         } else {
             return 'No data found.';
         }
+    }
+    
+    public function getOwner($id='') {
+        $mechanic_data = Mechanic::find($id);
+        $results = Mechanic::find($id)->carOwner->toArray();
+        $car_id = $results['car_id'];
+        $car_data = Car::find($car_id);
+        echo "Mechanic Name:- ".$mechanic_data->name."<br/><br/>";
+        echo "Car Model:- ".$car_data->model."<br/><br/>";
+        //echo "<pre>";
+        //print_r($results);
+        echo "Owner Name:- ".$results['name'];
     }
 }
