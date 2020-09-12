@@ -11,6 +11,7 @@ use App\Mechanic;
 use App\Car;
 use App\Country;
 use App\Blog;
+use App\Employee;
 use Session;
 
 
@@ -63,8 +64,6 @@ class EloquentController extends Controller
         $car_data = Car::find($car_id);
         echo "Mechanic Name:- ".$mechanic_data->name."<br/><br/>";
         echo "Car Model:- ".$car_data->model."<br/><br/>";
-        //echo "<pre>";
-        //print_r($results);
         echo "Owner Name:- ".$results['name'];
     }
     
@@ -87,5 +86,31 @@ class EloquentController extends Controller
                 echo "Post title:- ".$blog->title." Author:-".$author."<br/>";
             }
         }
+    }
+    
+    public function getEmployeeAsset($id='') {
+        $emp = Employee::find($id);
+        if(empty($emp->emp_name)) {
+            return 'Employee not found.';
+        }
+        
+        echo "Name:- ".$emp->emp_name."<br/>";
+        if(empty($emp->asset->toArray())) {
+            return 'Employee image not found.';
+        }
+        echo "Image name:- ".$emp->asset->asset_name;
+    }
+    
+    public function getBlogAsset($id='') {
+        $blog = Blog::find($id);
+        if(empty($blog->title)) {
+            return 'Blog not found.';
+        }
+        
+        echo "Blog title:- ".$blog->title."<br/>";
+        if(empty($blog->asset->toArray())) {
+            return 'Blog image not found.';
+        }
+        echo "Image name:- ".$blog->asset->asset_name;
     }
 }

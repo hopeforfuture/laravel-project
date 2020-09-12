@@ -90,6 +90,8 @@ Route::prefix('eloquent')->group(function() {
     Route::get('/mechanic/{id}/getOwner', 'EloquentController@getOwner')->name('laravel.hasonethrough');
     Route::get('/mechanic/{id}/getOwner', 'EloquentController@getOwner')->name('laravel.hasonethrough');
     Route::get('/country/{id}/getBlogs', 'EloquentController@getBlogsByCountry')->name('laravel.hasmanythrough');
+    Route::get('/employee/{id}/getAsset', 'EloquentController@getEmployeeAsset')->name('laravel.onetoonepolymorphic');
+    Route::get('/blog/{id}/getAsset', 'EloquentController@getBlogAsset')->name('laravel.onetoonepolymorphicCopy');
 });
 
 

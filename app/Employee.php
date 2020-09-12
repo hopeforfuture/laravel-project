@@ -4,13 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Blog extends Model
+class Employee extends Model
 {
-    protected $table = 'blogs';
-    
-    public function author() {
-        return $this->belongsTo('App\Author', 'author_id');
-    }  
+    protected $table = 'employees';
     
     public function asset()
     {
