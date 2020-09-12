@@ -88,6 +88,8 @@ Route::prefix('eloquent')->group(function() {
     Route::get('/category/{id}/getposts', 'EloquentController@getPosts')->name('laravel.hasmany');
     Route::get('/user/{id}/getroles', 'EloquentController@getRoles')->name('laravel.manytomany');
     Route::get('/mechanic/{id}/getOwner', 'EloquentController@getOwner')->name('laravel.hasonethrough');
+    Route::get('/mechanic/{id}/getOwner', 'EloquentController@getOwner')->name('laravel.hasonethrough');
+    Route::get('/country/{id}/getBlogs', 'EloquentController@getBlogsByCountry')->name('laravel.hasmanythrough');
 });
 
 

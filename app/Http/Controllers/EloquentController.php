@@ -9,6 +9,7 @@ use App\DemoUserProfile;
 use App\NewsCategory;
 use App\Mechanic;
 use App\Car;
+use App\Country;
 use Session;
 
 
@@ -64,5 +65,24 @@ class EloquentController extends Controller
         //echo "<pre>";
         //print_r($results);
         echo "Owner Name:- ".$results['name'];
+    }
+    
+    public function getBlogsByCountry($id='') {
+        $country = Country::find($id);
+        if(empty($country->country_name)) {
+            return 'Country not found.';
+        }
+        $country_name = $country->country_name;
+        $blogs = Country::find($id)->blogs;
+        echo "Country name:- ". $country_name."<br/>";
+
+        if(empty($blogs->toArray())) {
+            echo "Sorry, no post avaialble from this country.";
+        }
+        else {
+            foreach($blogs as $blog) {
+                echo "Post title:- ".$blog->title."<br/>";
+            }
+        }
     }
 }
