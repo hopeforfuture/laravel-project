@@ -92,6 +92,7 @@ Route::prefix('eloquent')->group(function() {
     Route::get('/country/{id}/getBlogs', 'EloquentController@getBlogsByCountry')->name('laravel.hasmanythrough');
     Route::get('/employee/{id}/getAsset', 'EloquentController@getEmployeeAsset')->name('laravel.onetoonepolymorphic');
     Route::get('/blog/{id}/getAsset', 'EloquentController@getBlogAsset')->name('laravel.onetoonepolymorphicCopy');
+    Route::get('/blog/{id}/getComments', 'EloquentController@getBlogComments')->name('laravel.oneToManyPolymorphic');
 });
 
 

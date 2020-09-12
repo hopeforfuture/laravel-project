@@ -113,4 +113,23 @@ class EloquentController extends Controller
         }
         echo "Image name:- ".$blog->asset->asset_name;
     }
+    
+    public function getBlogComments($id='') {
+        $blog = Blog::find($id);
+        if(empty($blog->title)) {
+            return 'Blog not found.';
+        }
+        
+        echo "Blog title:- ".$blog->title."<br/>";
+        
+        if(empty($blog->comments->toArray())) {
+            return 'Comments not available for this blog.';
+        }
+        echo "----List of comments----<br/>";
+        echo "<ol>";
+        foreach($blog->comments as $comment) {
+            echo "<li>".$comment->body."</li>";
+        }
+        echo "</ol>";  
+    }
 }
