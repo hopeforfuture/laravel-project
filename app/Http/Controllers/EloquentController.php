@@ -10,6 +10,7 @@ use App\NewsCategory;
 use App\Mechanic;
 use App\Car;
 use App\Country;
+use App\Blog;
 use Session;
 
 
@@ -81,7 +82,9 @@ class EloquentController extends Controller
         }
         else {
             foreach($blogs as $blog) {
-                echo "Post title:- ".$blog->title."<br/>";
+                $blog_id = $blog->id;
+                $author = Blog::find($blog_id)->author->name;
+                echo "Post title:- ".$blog->title." Author:-".$author."<br/>";
             }
         }
     }
