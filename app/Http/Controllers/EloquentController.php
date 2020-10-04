@@ -11,7 +11,8 @@ use App\Mechanic;
 use App\Car;
 use App\Country;
 use App\Blog;
-use App\Employee;
+use App\Article;
+use App\Video;
 use Session;
 
 
@@ -131,5 +132,43 @@ class EloquentController extends Controller
             echo "<li>".$comment->body."</li>";
         }
         echo "</ol>";  
+    }
+    
+    public function getArticleTags($id='') {
+        $article = Article::find($id);
+        if(empty($article->title)) {
+            return 'Article not found.';
+        }
+        
+        echo "Article title:- ".$article->title."<br/>";
+        
+        if(empty($article->tags->toArray())) {
+            return 'Article tag not found.';
+        }
+        
+        echo "List of tags: <br/>";
+        
+        foreach ($article->tags as $tag) {
+            echo $tag->name . "<br/>";
+        }
+    }
+    
+    public function getVideoTags($id='') {
+        $video = Video::find($id);
+        if(empty($video->title)) {
+            return 'Video not found.';
+        }
+        
+        echo "Video title:- ".$video->title."<br/>";
+        
+        if(empty($video->tags->toArray())) {
+            return 'Article tag not found.';
+        }
+        
+        echo "List of tags: <br/>";
+        
+        foreach ($video->tags as $tag) {
+            echo $tag->name . "<br/>";
+        }
     }
 }

@@ -10,4 +10,8 @@ class Video extends Model
     {
         return $this->morphMany('App\Comment', 'commentable');
     }
+    
+    public function tags() {
+        return $this->morphToMany('App\Tag', 'taggable');
+    }
 }

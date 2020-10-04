@@ -14,5 +14,9 @@ class Article extends Model
     
     public function category() {
         return $this->belongsTo('App\NewsCategory', 'article_category');
-    }   
+    } 
+    
+    public function tags() {
+        return $this->morphToMany('App\Tag', 'taggable');
+    }
 }
